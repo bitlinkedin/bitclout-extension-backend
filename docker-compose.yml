@@ -1,0 +1,44 @@
+version: '3'
+services:
+
+  fleming-postgres:
+    image: "postgres"
+    container_name: fleming-postgres
+    volumes:
+      - fleming-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=fleming
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  fleming-backend:
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+    container_name: fleming-backend
+    environment:
+      - POSTGRES_HOST=fleming-postgres
+      - POSTGRES_DB=fleming
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 3000:3000
+    links:
+      - fleming-postgres
+
+  fleming-frontend:
+    build:
+      context: .
+      dockerfile: client.Dockerfile
+    container_name: fleming-frontend
+    ports:
+      - 4200:80
+    links:
+      - fleming-backend
+    stdin_open: true
+
+volumes:
+  fleming-data:

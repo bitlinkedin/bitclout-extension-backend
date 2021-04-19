@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+
+<div class="row" style="padding: 30px">
+    <h1 style="padding-right: 20px"> Room Details </h1>
+</div>
+
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Room Type</th>
+        <th scope="col">No. of Beds</th>
+        <th scope="col">No. of Rooms</th>
+        <th scope="col">Price(OMR)</th>
+        <th scope="col">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% for(var i=0;i<data.length; i++){ %>
+        <tr>
+            <th scope="row"><%= i+1 %></th>
+            <td><%= data[i]['Type'] %></td>
+            <td><%= data[i]['Beds'] %></td>
+            <td><%= data[i]['Rooms'] %></td>
+            <td><%= data[i]['Price'] %></td>
+            <td><%= data[i]['Description'] %></td>
+        </tr>
+    <% } %>
+    </tbody>
+</table>
+</body>
+</html>
