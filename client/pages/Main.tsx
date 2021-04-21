@@ -15,12 +15,14 @@ interface Profile {
 const Main = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
 
+  const loadProfiles = () => axios
+    .get('/api')
+    .then((response) =>
+      setProfiles((prevState) => response.data),
+    )
+
   useEffect(() => {
-    axios
-      .get('/api')
-      .then((response) =>
-        setProfiles((prevState) => response.data),
-      );
+    loadProfiles();
   }, []);
 
   const props = {
@@ -35,6 +37,7 @@ const Main = () => {
       }
       if (info.file.status === 'done') {
         message.success(`${info.file.name} file uploaded successfully`);
+        loadProfiles();
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} file upload failed.`);
       }

@@ -13,9 +13,7 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [
-        { from: 'client/assets', to: 'assets' },
-      ],
+      patterns: [{ from: 'client/assets', to: 'assets' }],
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
@@ -23,11 +21,7 @@ module.exports = {
       inject: 'body',
       chunks: ['index'],
     }),
-    new CleanWebpackPlugin({
-      dangerouslyAllowCleanPatternsOutsideProject: true,
-      verbose: true,
-      cleanStaleWebpackAssets: true,
-    }),
+    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),
   ],
   entry: {
@@ -40,11 +34,16 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+        },
+        include: path.join(__dirname, 'client'),
         exclude: /node_modules/,
       },
       {
         test: /\.jsx?$/,
+        include: path.join(__dirname, 'client'),
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -59,11 +58,13 @@ module.exports = {
       },
       {
         test: /\.(sa|sc|c)ss$/,
+        include: path.join(__dirname, 'client'),
         exclude: /node_modules/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.less$/,
+        include: path.join(__dirname, 'client'),
         exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
@@ -81,6 +82,7 @@ module.exports = {
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
+        include: path.join(__dirname, 'client'),
         exclude: /node_modules/,
         use: [
           {

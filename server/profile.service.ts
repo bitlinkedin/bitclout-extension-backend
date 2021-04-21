@@ -11,8 +11,7 @@ export class ProfileService {
     @InjectRepository(ProfileEntity)
     private readonly repository: Repository<ProfileEntity>,
     private readonly csvService: CsvService,
-  ) {
-  }
+  ) {}
 
   getAll() {
     return this.repository.find({});
@@ -40,6 +39,21 @@ export class ProfileService {
 
   async uploadCsv(stream: Readable) {
     let dto = await this.convertCsvToDto(stream);
+    const linkedinUrlIndexMap = {};
+    const bitcloutUrlIndexMap = {};
+    dto.forEach((item, index) => {
+      if (linkedinUrlIndexMap[item.linkedinUrl] === undefined) {
+        linkedinUrlIndexMap[item.linkedinUrl] = index;
+      }
+      if (bitcloutUrlIndexMap[item.bitcloutUrl] === undefined) {
+        bitcloutUrlIndexMap[item.bitcloutUrl] = index;
+      }
+    });
+    dto = dto.filter(
+      (item, index) =>
+        linkedinUrlIndexMap[item.linkedinUrl] === index &&
+        bitcloutUrlIndexMap[item.bitcloutUrl] === index,
+    );
     const uniqLinkedinUrl = this.getUniqFields(dto, 'linkedinUrl');
     const uniqBitcloutUrl = this.getUniqFields(dto, 'bitcloutUrl');
     const existProfiles = await this.repository.find({
@@ -48,7 +62,14 @@ export class ProfileService {
         { bitcloutUrl: In(uniqBitcloutUrl) },
       ],
     });
-    dto = dto.filter(d => !existProfiles.some(profile => profile.bitcloutUrl === d.bitcloutUrl || profile.linkedinUrl === d.linkedinUrl));
+    dto = dto.filter(
+      (d) =>
+        !existProfiles.some(
+          (profile) =>
+            profile.bitcloutUrl === d.bitcloutUrl ||
+            profile.linkedinUrl === d.linkedinUrl,
+        ),
+    );
 
     return this.repository.save(dto.map((d) => ProfileEntity.create(d)));
   }
