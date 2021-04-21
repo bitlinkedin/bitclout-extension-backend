@@ -53,7 +53,7 @@ const App = () => {
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
             <Menu.Item key="1" icon={<PieChartOutlined />}>
-              Option 1
+              Profiles
             </Menu.Item>
           </Menu>
         </Sider>

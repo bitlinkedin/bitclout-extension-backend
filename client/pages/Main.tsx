@@ -29,7 +29,9 @@ const Main = () => {
     name: 'file',
     action: '/api/',
     headers: {
-      authorization: 'authorization-text',
+      authorization: `Bearer ${localStorage.getItem(
+        'accessToken',
+      )}`,
     },
     onChange(info) {
       if (info.file.status !== 'uploading') {
